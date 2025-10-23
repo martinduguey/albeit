@@ -1,16 +1,19 @@
 #ifndef __ALBEIT_MATRIX_HPP__
 #define __ALBEIT_MATRIX_HPP__
 
-template<class T>
-class AlbeitMatrix
-{
+class AlbeitMatrix{
+
     private:
-        const int nb_rows_;
-		const int nb_columns_;
+    
+        int nb_rows_;
+	    int nb_columns_;
 		
     public:
+    
+        //Builder
         AlbeitMatrix(int nb_rows, int nb_colums);
         ~AlbeitMatrix();
+
 };
 
 #endif
