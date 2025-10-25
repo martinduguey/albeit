@@ -1,10 +1,13 @@
 #include "../albeit-code/structures/albeit_matrix.hpp"
+#include "../utils/utils_comp.hpp"
 
 #include <vector>
 
 //Tests
 static void test_init_albeit_matrix() {
-    AlbeitMatrix M(int nb_rows = 8, int nb_columns = 12);
+    AlbeitMatrix testM(8, 12);
+    CHECK_EQ(testM.getNbRows(), 8);
+    CHECK_EQ(testM.getNbColumns(), 12);
 }
 
 //Runner
