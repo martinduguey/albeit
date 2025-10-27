@@ -1,4 +1,4 @@
-#include "../albeit-code/structures/albeit_matrix.hpp"
+#include "../header/albeit_matrix.hpp"
 #include "../utils/utils_comp.hpp"
 
 #include <vector>

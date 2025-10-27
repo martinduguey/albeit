@@ -1,3 +1,6 @@
+#ifndef __ALBEIT_MATRIX_HPP__
+#define __ALBEIT_MATRIX_HPP__
+
 class AlbeitMatrix{
 
     public:
@@ -16,3 +19,5 @@ class AlbeitMatrix{
 	    int nb_columns_;
 
 };
+
+#endif
