@@ -6,7 +6,7 @@ AlbeitMatrix::AlbeitMatrix(int nb_rows, int nb_columns){
     nb_columns_ = nb_columns;
 }
 
-AlbeitMatrix::~AlbeitMatrix() {};
+// AlbeitMatrix::~AlbeitMatrix() {};
 
 //Methods
 int AlbeitMatrix::getNbRows() const {

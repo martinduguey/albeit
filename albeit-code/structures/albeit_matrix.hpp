@@ -4,7 +4,7 @@ class AlbeitMatrix{
     
         //Builder
         AlbeitMatrix(int nb_rows, int nb_columns);
-        virtual ~AlbeitMatrix();
+        ~AlbeitMatrix() = default;
 
         //Methods
         int getNbRows() const;
