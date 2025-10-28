@@ -13,7 +13,7 @@ class AlbeitFlatMatrix : public AlbeitMatrix{
         ~AlbeitFlatMatrix() = default;
 
         //Methods
-        double& getValue(unsigned int row, unsigned int column);
+        const double& getValue(unsigned int row, unsigned int column) const;
 
     private:
         std::vector<double> values_;
