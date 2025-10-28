@@ -13,7 +13,7 @@ class AlbeitMatrix{
         unsigned int getNbRows() const;
         unsigned int getNbColumns() const;
 
-    private:
+    protected:
     
         unsigned int nb_rows_;
 	    unsigned int nb_columns_;
