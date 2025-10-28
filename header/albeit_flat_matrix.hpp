@@ -10,6 +10,12 @@ class AlbeitFlatMatrix : public AlbeitMatrix{
 
         //Builder
         AlbeitFlatMatrix(unsigned int nb_rows, unsigned int nb_columns);
+        AlbeitFlatMatrix(
+            unsigned int nb_rows,
+            unsigned int nb_columns,
+            const std::vector<double>& values
+        );
+        AlbeitFlatMatrix(const AlbeitFlatMatrix& m);
         ~AlbeitFlatMatrix() = default;
 
         //Methods
