@@ -28,6 +28,12 @@ static void test_init_albeit_flat_matrix() {
     CHECK_EQ(testP.getNbRows(), 2);
     CHECK_EQ(testP.getNbColumns(), 2);
     CHECK_EQ(testP.getValue(0,0), 1.0);
+    //
+    std::vector<double> test_values2 = {1.0, 1.0, 1.0, 1.0};
+    AlbeitFlatMatrix testQ(2, 2, test_values2);
+    testQ(0,1) = 2.0;
+    CHECK_EQ(testQ.getValue(0,0), 1.0);
+    CHECK_EQ(testQ.getValue(0,1), 2.0);
 }
 
 //Runner

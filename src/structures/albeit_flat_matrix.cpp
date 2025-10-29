@@ -1,4 +1,5 @@
 #include "../../header/albeit_flat_matrix.hpp"
+#include <stdexcept>
 
 //Builder
 AlbeitFlatMatrix::AlbeitFlatMatrix(unsigned int nb_rows, unsigned int nb_columns)
@@ -15,7 +16,18 @@ AlbeitFlatMatrix::AlbeitFlatMatrix(const AlbeitFlatMatrix& m)
     values_ = m.values_;
 }
 
+//Operator
+double& AlbeitFlatMatrix::operator()(unsigned int row, unsigned int column){
+    if (row >= this->nb_rows_ || column >= this->nb_columns_) {
+        throw std::out_of_range("Indexes out of range");
+    }
+    return values_[row * this->nb_columns_ + column];
+}
+
 //Methods
 const double& AlbeitFlatMatrix::getValue(unsigned int row, unsigned int column) const {
+    if (row >= this->nb_rows_ || column >= this->nb_columns_) {
+        throw std::out_of_range("Indexes out of range");
+    }
     return values_[row * this->nb_columns_ + column];
 }

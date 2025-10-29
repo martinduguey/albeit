@@ -18,6 +18,9 @@ class AlbeitFlatMatrix : public AlbeitMatrix{
         AlbeitFlatMatrix(const AlbeitFlatMatrix& m);
         ~AlbeitFlatMatrix() = default;
 
+        //Operator
+        double& operator()(unsigned int row, unsigned int column);
+
         //Methods
         const double& getValue(unsigned int row, unsigned int column) const;
 
