@@ -40,42 +40,52 @@ static void test_init_albeit_flat_matrix() {
     CHECK_EQ(testQ.getValue(0,1), 3.0);
 }
 
-static void test_operation_albeit_flat_matrix() {
+static void test_sum_sub_albeit_flat_matrix() {
 
     std::vector<double> values1 = {1.0, 1.0, 1.0, 1.0};
     std::vector<double> values2 = {2.0, 2.0, 2.0, 2.0};
-    AlbeitFlatMatrix M(2, 2, values1);
-    AlbeitFlatMatrix N(2, 2, values2);
-    AlbeitFlatMatrix P = M + N;
-    CHECK_EQ(P.getValue(0,0), 3.0);
-    CHECK_EQ(P.getValue(0,1), 3.0);
-    CHECK_EQ(P.getValue(1,0), 3.0);
-    CHECK_EQ(P.getValue(1,1), 3.0);
+    AlbeitFlatMatrix testM(2, 2, values1);
+    AlbeitFlatMatrix testN(2, 2, values2);
+    AlbeitFlatMatrix testP = testM + testN;
+    CHECK_EQ(testP.getValue(0,0), 3.0);
+    CHECK_EQ(testP.getValue(0,1), 3.0);
+    CHECK_EQ(testP.getValue(1,0), 3.0);
+    CHECK_EQ(testP.getValue(1,1), 3.0);
     //
-    AlbeitFlatMatrix Q = N + M;
-    bool assert1 = (P == Q);
+    AlbeitFlatMatrix testQ = testN + testM;
+    bool assert1 = (testP == testQ);
     CHECK_EQ(assert1, true);
     //
-    AlbeitFlatMatrix R = Q;
-    R(1,1) += 1.0;
-    bool assert2 = (Q == R);
+    AlbeitFlatMatrix testR = testQ;
+    testR(1,1) += 1.0;
+    bool assert2 = (testQ == testR);
     CHECK_EQ(assert2, false);
     //
     std::vector<double> values3 = {3.0, 3.0, 3.0, 4.0};
-    AlbeitFlatMatrix S(2, 2, values3);
-    bool assert3 = (R == S);
+    AlbeitFlatMatrix testS(2, 2, values3);
+    bool assert3 = (testR == testS);
     CHECK_EQ(assert3, true);
     //
-    AlbeitFlatMatrix T = M - N;
-    AlbeitFlatMatrix U = N - M;
+    AlbeitFlatMatrix testT = testM - testN;
+    AlbeitFlatMatrix testU = testN - testM;
     std::vector<double> values4 = {1.0, 1.0, 1.0, 1.0};
     std::vector<double> values5 = {-1.0, -1.0, -1.0, -1.0};
-    AlbeitFlatMatrix V(2, 2, values4);
-    AlbeitFlatMatrix W(2, 2, values5);
-    bool assert4 = (T == W);
-    bool assert5 = (U == V);
+    AlbeitFlatMatrix testV(2, 2, values4);
+    AlbeitFlatMatrix testW(2, 2, values5);
+    bool assert4 = (testT == testW);
+    bool assert5 = (testU == testV);
     CHECK_EQ(assert4, true);
     CHECK_EQ(assert5, true);
+}
+
+static void test_product_albeit_flat_matrix() {
+    std::vector<double> values1 = {2.0, 2.0, 2.0, 2.0};
+    std::vector<double> values2 = {8.0, 8.0, 8.0, 8.0};
+    AlbeitFlatMatrix testA(2, 2, values1);
+    AlbeitFlatMatrix testRef(2, 2, values2);
+    AlbeitFlatMatrix testB = testA * testA;
+    bool assert1 = (testB == testRef);
+    CHECK_EQ(assert1, true);
 }
 
 //Runner
@@ -90,6 +100,7 @@ static void run(const char * name, void (*f)()) {
 int main(){
     run("test_init_albeit_matrix", test_init_albeit_matrix);
     run("test_init_albeit_flat_matrix", test_init_albeit_flat_matrix);
-    run("test_operation_albeit_flat_matrix", test_operation_albeit_flat_matrix);
+    run("test_sum_sub_albeit_flat_matrix", test_sum_sub_albeit_flat_matrix);
+    run("test_product_albeit_flat_matrix", test_product_albeit_flat_matrix);
     return EXIT_SUCCESS;
 }

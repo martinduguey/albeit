@@ -82,6 +82,27 @@ AlbeitFlatMatrix AlbeitFlatMatrix::operator-(const AlbeitFlatMatrix& m) const {
     return AlbeitFlatMatrix(this->nb_rows_, this->nb_columns_, sub_values);
 }
 
+AlbeitFlatMatrix AlbeitFlatMatrix::operator*(const AlbeitFlatMatrix& m) const {
+
+    if (m.nb_rows_ != this->nb_columns_) {
+        throw std::length_error("Matrix can't be multiplied");
+    }
+    int n = this->nb_rows_;
+    int p = m.nb_columns_;
+    int q = this->nb_columns_;
+
+    std::vector<double> prod_values(n * p, 0.0);
+
+    for (int i = 0; i != n; ++i){
+        for (int j = 0; j != p; ++j){
+            for (int k = 0; k != q; ++k){
+                prod_values[i * p + j] += this->values_[i * q + k] * m.values_[k * p + j];
+            }
+        }
+    }
+
+    return AlbeitFlatMatrix(n, p, prod_values);
+}
 
 //Methods
 const double& AlbeitFlatMatrix::getValue(unsigned int row, unsigned int column) const {

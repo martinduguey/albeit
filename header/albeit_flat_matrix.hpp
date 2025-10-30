@@ -23,6 +23,7 @@ class AlbeitFlatMatrix : public AlbeitMatrix{
         bool operator==(const AlbeitFlatMatrix& m) const;
         AlbeitFlatMatrix operator+(const AlbeitFlatMatrix& m) const;
         AlbeitFlatMatrix operator-(const AlbeitFlatMatrix& m) const;
+        AlbeitFlatMatrix operator*(const AlbeitFlatMatrix& m) const;
 
         //Methods
         const double& getValue(unsigned int row, unsigned int column) const;
