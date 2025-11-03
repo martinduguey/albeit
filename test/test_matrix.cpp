@@ -1,5 +1,6 @@
 #include "../header/albeit_matrix.hpp"
 #include "../header/albeit_flat_matrix.hpp"
+#include "../header/albeit_sparse_matrix.hpp"
 #include "../utils/utils_comp.hpp"
 
 #include <vector>
@@ -79,6 +80,7 @@ static void test_sum_sub_albeit_flat_matrix() {
 }
 
 static void test_product_albeit_flat_matrix() {
+
     std::vector<double> values1 = {2.0, 2.0, 2.0, 2.0};
     std::vector<double> values2 = {8.0, 8.0, 8.0, 8.0};
     AlbeitFlatMatrix testA(2, 2, values1);
@@ -86,6 +88,15 @@ static void test_product_albeit_flat_matrix() {
     AlbeitFlatMatrix testB = testA * testA;
     bool assert1 = (testB == testRef);
     CHECK_EQ(assert1, true);
+}
+
+static void test_init_albeit_sparse_matrix() {
+
+    AlbeitSparseMatrix testM(8, 12);
+    CHECK_EQ(testM.getNbRows(), 8);
+    CHECK_EQ(testM.getNbColumns(), 12);
+    CHECK_EQ(testM.getValue(0,0), 1);
+    CHECK_EQ(testM.getValue(1,1), 0);
 }
 
 //Runner
@@ -102,5 +113,6 @@ int main(){
     run("test_init_albeit_flat_matrix", test_init_albeit_flat_matrix);
     run("test_sum_sub_albeit_flat_matrix", test_sum_sub_albeit_flat_matrix);
     run("test_product_albeit_flat_matrix", test_product_albeit_flat_matrix);
+    run("test_init_albeit_sparse_matrix", test_init_albeit_sparse_matrix);
     return EXIT_SUCCESS;
 }
