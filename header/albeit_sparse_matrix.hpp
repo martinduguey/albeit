@@ -10,6 +10,14 @@ class AlbeitSparseMatrix : public AlbeitMatrix{
 
         //Builder
         AlbeitSparseMatrix(unsigned int nb_rows, unsigned int nb_columns);
+        AlbeitSparseMatrix(
+            unsigned int nb_rows,
+            unsigned int nb_columns,
+            const std::vector<unsigned int>& row_index,
+            const std::vector<unsigned int>& column_index,
+            const std::vector<double>& values
+        );
+        AlbeitSparseMatrix(const AlbeitSparseMatrix& m);
         ~AlbeitSparseMatrix() = default;
 
         //Methods

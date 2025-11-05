@@ -1,5 +1,6 @@
 #include "../../header/albeit_sparse_matrix.hpp"
 #include <stdexcept>
+#include <cassert>
 
 //Builder
 AlbeitSparseMatrix::AlbeitSparseMatrix(unsigned int nb_rows, unsigned int nb_columns)
@@ -9,6 +10,29 @@ AlbeitSparseMatrix::AlbeitSparseMatrix(unsigned int nb_rows, unsigned int nb_col
     values_(1, 1)
     {};
 
+AlbeitSparseMatrix::AlbeitSparseMatrix(
+    unsigned int nb_rows,
+    unsigned int nb_columns,
+    const std::vector<unsigned int>& row_index,
+    const std::vector<unsigned int>& column_index,
+    const std::vector<double>& values
+) : AlbeitMatrix(nb_rows, nb_columns) {
+
+    assert(row_index.size() == column_index.size());
+    assert(row_index.size() == values.size());
+    assert(*std::max_element(row_index.begin(), row_index.end()) < nb_rows);
+    assert(*std::max_element(column_index.begin(), column_index.end()) < nb_columns);
+    row_index_ = row_index;
+    column_index_ = column_index;
+    values_ = values;
+}
+
+AlbeitSparseMatrix::AlbeitSparseMatrix(const AlbeitSparseMatrix& m)
+: AlbeitMatrix(m.nb_rows_, m.nb_columns_) {
+    row_index_ = m.row_index_;
+    column_index_ = m.column_index_;
+    values_ = m.values_;
+}
 
 //Methods
 double AlbeitSparseMatrix::getValue(unsigned int row, unsigned int column) const {
@@ -17,28 +41,17 @@ double AlbeitSparseMatrix::getValue(unsigned int row, unsigned int column) const
         throw std::out_of_range("Indexes out of range");
     }
 
-    auto it = std::find(
-        this->row_index_.begin(),
-        this->row_index_.end(),
-        row
-    );
+    auto it_column = this->column_index_.begin();
 
-    if (
-        (
-            it != this->row_index_.end()
-        )
-        &&
-        (
-            std::find(
-                this->column_index_.begin(),
-                this->column_index_.end(),
-                column
-            ) != this->column_index_.end()
-        )
-    ) {
-        int shift = it - this->row_index_.begin();
-        auto itv = this->values_.begin();
-        return *(itv + shift);
+    for(auto it_row = this->row_index_.begin(); it_row != this->row_index_.end(); ++it_row){
+
+        if(*it_row == row && *it_column == column) {
+            int shift = it_row - this->row_index_.begin();
+            auto it_value = this->values_.begin();
+            return *(it_value + shift);
+        }
+
+        ++it_column;
     }
 
     return 0;

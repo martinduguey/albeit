@@ -97,6 +97,26 @@ static void test_init_albeit_sparse_matrix() {
     CHECK_EQ(testM.getNbColumns(), 12);
     CHECK_EQ(testM.getValue(0,0), 1);
     CHECK_EQ(testM.getValue(1,1), 0);
+    //
+    std::vector<double> test_values = {1.0, 2.0};
+    std::vector<unsigned int> test_row_index = {0, 1};
+    std::vector<unsigned int> test_column_index = {0, 1};
+    AlbeitSparseMatrix testN(3, 3, test_row_index, test_column_index, test_values);
+    CHECK_EQ(testN.getNbRows(), 3);
+    CHECK_EQ(testN.getNbColumns(), 3);
+    CHECK_EQ(testN.getValue(0,0), 1.0);
+    CHECK_EQ(testN.getValue(1,1), 2.0);
+    CHECK_EQ(testN.getValue(2,2), 0.0);
+    //
+    AlbeitSparseMatrix testP = testN;
+    CHECK_EQ(testP.getNbRows(), 3);
+    CHECK_EQ(testP.getNbColumns(), 3);
+    CHECK_EQ(testP.getValue(1,0), 0.0);
+    //
+    std::vector<double> test_values2 = {1.0, 2.0};
+    std::vector<unsigned int> test_row_index2 = {0, 1};
+    std::vector<unsigned int> test_column_index2 = {0, 1, 0};
+    AlbeitSparseMatrix testQ(8, 5, test_row_index, test_column_index, test_values);
 }
 
 //Runner
