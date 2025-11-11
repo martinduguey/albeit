@@ -93,9 +93,9 @@ AlbeitFlatMatrix AlbeitFlatMatrix::operator*(const AlbeitFlatMatrix& m) const {
 
     std::vector<double> prod_values(n * p, 0.0);
 
-    for (int i = 0; i != n; ++i){
-        for (int j = 0; j != p; ++j){
-            for (int k = 0; k != q; ++k){
+    for (int j = 0; j != p; ++j){
+        for (int k = 0; k != q; ++k){
+            for (int i = 0; i != n; ++i){
                 prod_values[i * p + j] += this->values_[i * q + k] * m.values_[k * p + j];
             }
         }
