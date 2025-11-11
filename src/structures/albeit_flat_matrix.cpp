@@ -21,7 +21,7 @@ double& AlbeitFlatMatrix::operator()(unsigned int row, unsigned int column){
     if (row >= this->nb_rows_ || column >= this->nb_columns_) {
         throw std::out_of_range("Indexes out of range");
     }
-    return values_[row * this->nb_columns_ + column];
+    return this->values_[row * this->nb_columns_ + column];
 }
 
 bool AlbeitFlatMatrix::operator==(const AlbeitFlatMatrix& m) const {
