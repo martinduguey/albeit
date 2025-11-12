@@ -14,7 +14,8 @@ class AlbeitSparseMatrix : public AlbeitMatrix{
             unsigned int nb_rows,
             unsigned int nb_columns,
             const std::vector<unsigned int>& row_index,
-            const std::vector<unsigned int>& column_index,
+            const std::vector<unsigned int>& column_ptr,
+            const std::vector<unsigned int>& column_nnz,
             const std::vector<double>& values
         );
         AlbeitSparseMatrix(const AlbeitSparseMatrix& m);
@@ -29,7 +30,8 @@ class AlbeitSparseMatrix : public AlbeitMatrix{
 
     private:
         std::vector<unsigned int> row_index_;
-        std::vector<unsigned int> column_index_;
+        std::vector<unsigned int> column_ptr_;
+        std::vector<unsigned int> column_nnz_;
         std::vector<double> values_;
 
 };

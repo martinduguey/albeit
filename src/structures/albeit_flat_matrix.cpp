@@ -13,7 +13,7 @@ AlbeitFlatMatrix::AlbeitFlatMatrix(
 
 AlbeitFlatMatrix::AlbeitFlatMatrix(const AlbeitFlatMatrix& m)
 : AlbeitMatrix(m.nb_rows_, m.nb_columns_) {
-    values_ = m.values_;
+    this->values_ = m.values_;
 }
 
 //Operator
