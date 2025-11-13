@@ -80,27 +80,73 @@ AlbeitSparseMatrix::AlbeitSparseMatrix(const AlbeitSparseMatrix& m)
 }
 
 //Operator
-// double& AlbeitSparseMatrix::operator()(unsigned int row, unsigned int column){
+double& AlbeitSparseMatrix::operator()(unsigned int row, unsigned int column){
     
-//     if (row >= this->nb_rows_ || column >= this->nb_columns_) {
-//         throw std::out_of_range("Indexes out of range");
-//     }
+    if (row >= this->nb_rows_ || column >= this->nb_columns_) {
+        throw std::out_of_range("Indexes out of range");
+    }
 
-//     for(unsigned int item = 0; item != this->row_index_.size(); ++item){
+    if (this->column_nnz_[column] == 0) {
 
-//         if(this->row_index_[item] == row && this->column_index_[item] == column) {
-//             return this->values_[item];
-//         }
+        this->column_nnz_[column] += 1;
+        unsigned int insert_position = this->column_ptr_[column + 1];
+        std::vector<unsigned int> unit_vect(this->column_ptr_.size() - column - 1, 1);
+        
+        std::transform(
+            this->column_ptr_.begin() + column + 1,
+            this->column_ptr_.end(),
+            unit_vect.begin(),
+            this->column_ptr_.begin() + column + 1,
+            std::plus<unsigned int>()
+        );
+        this->row_index_.insert(this->row_index_.begin() + insert_position, row);
+        this->values_.insert(this->values_.begin() + insert_position, 1.0);
+        
+        return this->values_[insert_position];
+    }
 
-//     }
+    unsigned int count_shift = 0;
 
-//     this->row_index_.push_back(row);
-//     this->column_index_.push_back(column);
-//     this->values_.push_back(1.0);
+    if (this->column_nnz_[column] != 0) {
 
-//     return this->values_.back();
+        unsigned int start_ptr = this->column_ptr_[column];
+        unsigned int end_ptr = this->column_ptr_[column + 1];
 
-// }
+        for(unsigned int item = start_ptr; item != end_ptr; ++item){
+
+            if(this->row_index_[item] == row) {
+                return this->values_[item];
+            }
+
+            if(this->row_index_[item] < row) {
+                ++count_shift;
+            }
+        }
+
+    }
+
+    this->column_nnz_[column] += 1;
+    unsigned int insert_position = this->column_ptr_[column] + count_shift;
+        
+    if (count_shift == 0) {
+        this->column_ptr_[column] = insert_position;
+    }
+
+    std::vector<unsigned int> unit_vect(this->column_ptr_.size() - column - 1, 1);
+        
+    std::transform(
+        this->column_ptr_.begin() + column + 1,
+        this->column_ptr_.end(),
+        unit_vect.begin(),
+        this->column_ptr_.begin() + column + 1,
+        std::plus<unsigned int>()
+    );
+    this->row_index_.insert(this->row_index_.begin() + insert_position, row);
+    this->values_.insert(this->values_.begin() + insert_position, 1.0);
+        
+    return this->values_[insert_position];
+
+}
 
 bool AlbeitSparseMatrix::operator==(const AlbeitSparseMatrix& m) const {
     
@@ -110,9 +156,13 @@ bool AlbeitSparseMatrix::operator==(const AlbeitSparseMatrix& m) const {
 
     std::vector<unsigned int> sub_row_index(this->row_index_.size(), 0);
     std::vector<unsigned int> sub_column_ptr(this->column_ptr_.size(), 0);
+    std::vector<unsigned int> sub_column_nnz(this->column_nnz_.size(), 0);
     std::vector<double> sub_values(this->values_.size(), 0.0);
+    
     std::vector<double> reference_double(this->values_.size(), 0.0);
-    std::vector<unsigned int> reference_uint(this->row_index_.size(), 0);
+    std::vector<unsigned int> reference_uint_row(this->row_index_.size(), 0);
+    std::vector<unsigned int> reference_uint_column_ptr(this->column_ptr_.size(), 0);
+    std::vector<unsigned int> reference_uint_column_nnz(this->column_nnz_.size(), 0);
 
     std::transform (
         this->row_index_.begin(),
@@ -131,6 +181,14 @@ bool AlbeitSparseMatrix::operator==(const AlbeitSparseMatrix& m) const {
     );
 
     std::transform (
+        this->column_nnz_.begin(),
+        this->column_nnz_.end(),
+        m.column_nnz_.begin(),
+        sub_column_nnz.begin(),
+        std::minus<unsigned int>()
+    );
+
+    std::transform (
         this->values_.begin(),
         this->values_.end(),
         m.values_.begin(),
@@ -142,21 +200,29 @@ bool AlbeitSparseMatrix::operator==(const AlbeitSparseMatrix& m) const {
         std::equal(
             sub_row_index.begin(),
             sub_row_index.end(),
-            reference_uint.begin()
+            reference_uint_row.begin()
         )
     ){
         if(
             std::equal(
                 sub_column_ptr.begin(),
                 sub_column_ptr.end(),
-                reference_uint.begin()
+                reference_uint_column_ptr.begin()
             )
         ){
-            return std::equal(
-                sub_values.begin(),
-                sub_values.end(),
-                reference_double.begin()
-            );
+            if (
+                std::equal(
+                    sub_column_nnz.begin(),
+                    sub_column_nnz.end(),
+                    reference_uint_column_nnz.begin()
+                )
+            ){
+                return std::equal(
+                    sub_values.begin(),
+                    sub_values.end(),
+                    reference_double.begin()
+                );
+            }  
         }
     }
 

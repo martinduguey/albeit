@@ -106,7 +106,14 @@ static void test_init_albeit_sparse_matrix() {
     std::vector<unsigned int> test_row_index = {0, 1};
     std::vector<unsigned int> test_column_ptr = {0, 1, 2, 2};
     std::vector<unsigned int> test_column_nnz = {1, 1, 0};
-    AlbeitSparseMatrix testN(3, 3, test_row_index, test_column_ptr, test_column_nnz, test_values);
+    AlbeitSparseMatrix testN(
+        3,
+        3,
+        test_row_index,
+        test_column_ptr,
+        test_column_nnz,
+        test_values
+    );
     CHECK_EQ(testN.getNbRows(), 3);
     CHECK_EQ(testN.getNbColumns(), 3);
     CHECK_EQ(testN.getValue(0,0), 1.0);
@@ -118,20 +125,37 @@ static void test_init_albeit_sparse_matrix() {
     CHECK_EQ(testP.getNbColumns(), 3);
     CHECK_EQ(testP.getValue(1,0), 0.0);
     //
-    // std::vector<double> test_values2 = {1.0, 2.0};
-    // std::vector<unsigned int> test_row_index2 = {0, 1};
-    // std::vector<unsigned int> test_column_index2 = {0, 1};
-    // AlbeitSparseMatrix testQ(8, 5, test_row_index2, test_column_index2, test_values2);
-    // //
-    // testQ(0, 0) = 3.0;
-    // testQ(7, 4) = 36.0;
-    // CHECK_EQ(testQ.getValue(0,0), 3.0);
-    // CHECK_EQ(testQ.getValue(7,4), 36.0);
-    // testQ(7, 4) += 6.0;
-    // CHECK_EQ(testQ.getValue(7,4), 42.0);
-    // AlbeitSparseMatrix testR = testQ;
-    // bool assert1 = (testR == testQ);
-    // CHECK_EQ(assert1, true);
+    // testQ
+    // [1.0 0.0 0.0 0.0 0.0]
+    // [0.0 2.0 0.0 0.0 0.0]
+    // [0.0 0.0 0.0 0.0 0.0]
+    // [0.0 0.0 0.0 0.0 0.0]
+    // [0.0 0.0 0.0 0.0 0.0]
+    // [0.0 0.0 0.0 0.0 0.0]
+    // [0.0 0.0 0.0 0.0 0.0]
+    // [0.0 0.0 0.0 0.0 0.0]
+    std::vector<double> test_values2 = {1.0, 2.0};
+    std::vector<unsigned int> test_row_index2 = {0, 1};
+    std::vector<unsigned int> test_column_ptr2 = {0, 1, 2, 2, 2, 2};
+    std::vector<unsigned int> test_column_nnz2 = {1, 1, 0, 0, 0};
+    AlbeitSparseMatrix testQ(
+        8,
+        5,
+        test_row_index2,
+        test_column_ptr2,
+        test_column_nnz2,
+        test_values2
+    );
+    //
+    testQ(0, 0) = 3.0;
+    testQ(7, 4) = 36.0;
+    CHECK_EQ(testQ.getValue(0,0), 3.0);
+    CHECK_EQ(testQ.getValue(7,4), 36.0);
+    testQ(7, 4) += 6.0;
+    CHECK_EQ(testQ.getValue(7,4), 42.0);
+    AlbeitSparseMatrix testR = testQ;
+    bool assert1 = (testR == testQ);
+    CHECK_EQ(assert1, true);
 }
 
 //Runner
