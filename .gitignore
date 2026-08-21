@@ -1,0 +1,7 @@
+# Build artifacts
+test/test_matrix
+*.o
+*.dSYM/
+
+# Editor
+.vscode/
