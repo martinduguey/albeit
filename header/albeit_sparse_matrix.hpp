@@ -24,6 +24,9 @@ class AlbeitSparseMatrix : public AlbeitMatrix{
         //Operator
         double& operator()(unsigned int row, unsigned int column);
         bool operator==(const AlbeitSparseMatrix& m) const;
+        AlbeitSparseMatrix operator+(const AlbeitSparseMatrix& m) const;
+        AlbeitSparseMatrix operator-(const AlbeitSparseMatrix& m) const;
+        AlbeitSparseMatrix operator*(const AlbeitSparseMatrix& m) const;
 
         //Methods
         double getValue(unsigned int row, unsigned int column) const;

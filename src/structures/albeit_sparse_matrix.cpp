@@ -229,6 +229,66 @@ bool AlbeitSparseMatrix::operator==(const AlbeitSparseMatrix& m) const {
     return false;
 }
 
+AlbeitSparseMatrix AlbeitSparseMatrix::operator+(const AlbeitSparseMatrix& m) const {
+    if (m.nb_rows_ != this->nb_rows_ || m.nb_columns_ != this->nb_columns_) {
+        throw std::logic_error("Can't add matrices with different sizes");
+    }
+
+    AlbeitSparseMatrix result(this->nb_rows_, this->nb_columns_);
+
+    for (unsigned int row = 0; row < this->nb_rows_; ++row) {
+        for (unsigned int column = 0; column < this->nb_columns_; ++column) {
+            double value = this->getValue(row, column) + m.getValue(row, column);
+            if (value != 0.0) {
+                result(row, column) = value;
+            }
+        }
+    }
+
+    return result;
+}
+
+AlbeitSparseMatrix AlbeitSparseMatrix::operator-(const AlbeitSparseMatrix& m) const {
+    if (m.nb_rows_ != this->nb_rows_ || m.nb_columns_ != this->nb_columns_) {
+        throw std::logic_error("Can't subtract matrices with different sizes");
+    }
+
+    AlbeitSparseMatrix result(this->nb_rows_, this->nb_columns_);
+
+    for (unsigned int row = 0; row < this->nb_rows_; ++row) {
+        for (unsigned int column = 0; column < this->nb_columns_; ++column) {
+            double value = this->getValue(row, column) - m.getValue(row, column);
+            if (value != 0.0) {
+                result(row, column) = value;
+            }
+        }
+    }
+
+    return result;
+}
+
+AlbeitSparseMatrix AlbeitSparseMatrix::operator*(const AlbeitSparseMatrix& m) const {
+    if (this->nb_columns_ != m.nb_rows_) {
+        throw std::logic_error("Can't multiply matrices with incompatible sizes");
+    }
+
+    AlbeitSparseMatrix result(this->nb_rows_, m.nb_columns_);
+
+    for (unsigned int row = 0; row < this->nb_rows_; ++row) {
+        for (unsigned int column = 0; column < m.nb_columns_; ++column) {
+            double value = 0.0;
+            for (unsigned int k = 0; k < this->nb_columns_; ++k) {
+                value += this->getValue(row, k) * m.getValue(k, column);
+            }
+            if (value != 0.0) {
+                result(row, column) = value;
+            }
+        }
+    }
+
+    return result;
+}
+
 //Methods
 double AlbeitSparseMatrix::getValue(unsigned int row, unsigned int column) const {
     
