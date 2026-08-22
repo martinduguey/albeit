@@ -1,5 +1,7 @@
 # Build artifacts
 test/test_matrix
+test/test_matrix_debug
+test/test_matrix_release
 *.o
 *.dSYM/
 

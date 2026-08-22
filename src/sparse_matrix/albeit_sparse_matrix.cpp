@@ -1,6 +1,6 @@
 #include "albeit_sparse_matrix.hpp"
+#include "common/albeit_checks.hpp"
 #include <stdexcept>
-#include <cassert>
 
 //Builder
 AlbeitSparseMatrix::AlbeitSparseMatrix(unsigned int nb_rows, unsigned int nb_columns)
@@ -23,47 +23,45 @@ AlbeitSparseMatrix::AlbeitSparseMatrix(
     const std::vector<double>& values
 ) : AlbeitMatrix(nb_rows, nb_columns) {
 
-    if ((row_index.size() != values.size())){
-        throw std::out_of_range("Row index and values vectors' size should be equals");
-    }
+    ALBEIT_CHECK(
+        row_index.size() == values.size(),
+        std::out_of_range("Row index and values vectors' size should be equals")
+    );
 
-    if ( 
-        (*std::max_element(row_index.begin(), row_index.end()) >= nb_rows) ||
-        (*std::max_element(column_ptr.begin(), column_ptr.end()) >= nb_rows)
-    ) {
-        throw std::logic_error("Can't specify indexes out of matrix space");
-    }
+    ALBEIT_CHECK(
+        (*std::max_element(row_index.begin(), row_index.end()) < nb_rows) &&
+        (*std::max_element(column_ptr.begin(), column_ptr.end()) < nb_rows),
+        std::logic_error("Can't specify indexes out of matrix space")
+    );
 
-    if (
-        column_nnz.size() != nb_columns
-    ) {
-        throw std::logic_error(
+    ALBEIT_CHECK(
+        column_nnz.size() == nb_columns,
+        std::logic_error(
             "Can't specify column_nnz with "
             "different from number of columns"
-        );
-    }
+        )
+    );
 
-    if (
-        column_ptr.size() != nb_columns + 1
-    ) {
-        throw std::logic_error(
+    ALBEIT_CHECK(
+        column_ptr.size() == nb_columns + 1,
+        std::logic_error(
             "Can't specify column_ptr with "
             "different size from number of columns + 1"
-        );
-    }
+        )
+    );
 
-    if (column_ptr[column_ptr.size() - 1] != values.size()) {
-        throw std::logic_error(
+    ALBEIT_CHECK(
+        column_ptr[column_ptr.size() - 1] == values.size(),
+        std::logic_error(
             "Can't specify column_ptr with last element "
             "different from values size"
-        );
-    }
+        )
+    );
 
-    if (
-        values.size() > nb_rows * nb_columns
-    ) {
-        throw std::logic_error("Can't specify values out of matrix space");
-    }
+    ALBEIT_CHECK(
+        values.size() <= nb_rows * nb_columns,
+        std::logic_error("Can't specify values out of matrix space")
+    );
 
     row_index_ = row_index;
     column_ptr_ = column_ptr;
@@ -81,10 +79,11 @@ AlbeitSparseMatrix::AlbeitSparseMatrix(const AlbeitSparseMatrix& m)
 
 //Operator
 double& AlbeitSparseMatrix::operator()(unsigned int row, unsigned int column){
-    
-    if (row >= this->nb_rows_ || column >= this->nb_columns_) {
-        throw std::out_of_range("Indexes out of range");
-    }
+
+    ALBEIT_CHECK(
+        row < this->nb_rows_ && column < this->nb_columns_,
+        std::out_of_range("Indexes out of range")
+    );
 
     if (this->column_nnz_[column] == 0) {
 
@@ -230,9 +229,10 @@ bool AlbeitSparseMatrix::operator==(const AlbeitSparseMatrix& m) const {
 }
 
 AlbeitSparseMatrix AlbeitSparseMatrix::operator+(const AlbeitSparseMatrix& m) const {
-    if (m.nb_rows_ != this->nb_rows_ || m.nb_columns_ != this->nb_columns_) {
-        throw std::logic_error("Can't add matrices with different sizes");
-    }
+    ALBEIT_CHECK(
+        m.nb_rows_ == this->nb_rows_ && m.nb_columns_ == this->nb_columns_,
+        std::logic_error("Can't add matrices with different sizes")
+    );
 
     AlbeitSparseMatrix result(this->nb_rows_, this->nb_columns_);
 
@@ -249,9 +249,10 @@ AlbeitSparseMatrix AlbeitSparseMatrix::operator+(const AlbeitSparseMatrix& m) co
 }
 
 AlbeitSparseMatrix AlbeitSparseMatrix::operator-(const AlbeitSparseMatrix& m) const {
-    if (m.nb_rows_ != this->nb_rows_ || m.nb_columns_ != this->nb_columns_) {
-        throw std::logic_error("Can't subtract matrices with different sizes");
-    }
+    ALBEIT_CHECK(
+        m.nb_rows_ == this->nb_rows_ && m.nb_columns_ == this->nb_columns_,
+        std::logic_error("Can't subtract matrices with different sizes")
+    );
 
     AlbeitSparseMatrix result(this->nb_rows_, this->nb_columns_);
 
@@ -268,9 +269,10 @@ AlbeitSparseMatrix AlbeitSparseMatrix::operator-(const AlbeitSparseMatrix& m) co
 }
 
 AlbeitSparseMatrix AlbeitSparseMatrix::operator*(const AlbeitSparseMatrix& m) const {
-    if (this->nb_columns_ != m.nb_rows_) {
-        throw std::logic_error("Can't multiply matrices with incompatible sizes");
-    }
+    ALBEIT_CHECK(
+        this->nb_columns_ == m.nb_rows_,
+        std::logic_error("Can't multiply matrices with incompatible sizes")
+    );
 
     AlbeitSparseMatrix result(this->nb_rows_, m.nb_columns_);
 
@@ -291,10 +293,11 @@ AlbeitSparseMatrix AlbeitSparseMatrix::operator*(const AlbeitSparseMatrix& m) co
 
 //Methods
 double AlbeitSparseMatrix::getValue(unsigned int row, unsigned int column) const {
-    
-    if (row >= this->nb_rows_ || column >= this->nb_columns_) {
-        throw std::out_of_range("Indexes out of range");
-    }
+
+    ALBEIT_CHECK(
+        row < this->nb_rows_ && column < this->nb_columns_,
+        std::out_of_range("Indexes out of range")
+    );
 
     if (this->column_nnz_[column] == 0) {
         return 0.0;

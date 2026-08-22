@@ -1,19 +1,36 @@
 CXX      := c++
-CXXFLAGS := -std=c++17 -Wall -Wextra -g
+CXXFLAGS := -std=c++17 -Wall -Wextra
+
+DEBUG_FLAGS   := -g -O0
+RELEASE_FLAGS := -O3 -DNDEBUG
 
 SRC      := $(wildcard src/*/*.cpp)
 TEST_SRC := test/test_matrix.cpp
-TEST_BIN := test/test_matrix
 
-.PHONY: all test clean
+DEBUG_BIN   := test/test_matrix_debug
+RELEASE_BIN := test/test_matrix_release
 
-all: $(TEST_BIN)
+.PHONY: all debug release test test-debug test-release clean
 
-$(TEST_BIN): $(SRC) $(TEST_SRC)
-	$(CXX) $(CXXFLAGS) -Isrc -Itest $^ -o $@
+all: debug release
 
-test: $(TEST_BIN)
-	./$(TEST_BIN)
+debug: $(DEBUG_BIN)
+
+release: $(RELEASE_BIN)
+
+$(DEBUG_BIN): $(SRC) $(TEST_SRC)
+	$(CXX) $(CXXFLAGS) $(DEBUG_FLAGS) -Isrc -Itest $^ -o $@
+
+$(RELEASE_BIN): $(SRC) $(TEST_SRC)
+	$(CXX) $(CXXFLAGS) $(RELEASE_FLAGS) -Isrc -Itest $^ -o $@
+
+test: test-debug test-release
+
+test-debug: $(DEBUG_BIN)
+	./$(DEBUG_BIN)
+
+test-release: $(RELEASE_BIN)
+	./$(RELEASE_BIN)
 
 clean:
-	rm -f $(TEST_BIN)
+	rm -f $(DEBUG_BIN) $(RELEASE_BIN)

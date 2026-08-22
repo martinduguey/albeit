@@ -1,4 +1,5 @@
 #include "albeit_flat_matrix.hpp"
+#include "common/albeit_checks.hpp"
 #include <stdexcept>
 
 //Builder
@@ -18,9 +19,10 @@ AlbeitFlatMatrix::AlbeitFlatMatrix(const AlbeitFlatMatrix& m)
 
 //Operator
 double& AlbeitFlatMatrix::operator()(unsigned int row, unsigned int column){
-    if (row >= this->nb_rows_ || column >= this->nb_columns_) {
-        throw std::out_of_range("Indexes out of range");
-    }
+    ALBEIT_CHECK(
+        row < this->nb_rows_ && column < this->nb_columns_,
+        std::out_of_range("Indexes out of range")
+    );
     return this->values_[row * this->nb_columns_ + column];
 }
 
@@ -46,9 +48,10 @@ bool AlbeitFlatMatrix::operator==(const AlbeitFlatMatrix& m) const {
 
 AlbeitFlatMatrix AlbeitFlatMatrix::operator+(const AlbeitFlatMatrix& m) const {
 
-    if (m.nb_rows_ != this->nb_rows_ || m.nb_columns_ != this->nb_columns_) {
-        throw std::length_error("Matrix of different size are not additive");
-    }
+    ALBEIT_CHECK(
+        m.nb_rows_ == this->nb_rows_ && m.nb_columns_ == this->nb_columns_,
+        std::length_error("Matrix of different size are not additive")
+    );
 
     std::vector<double> sum_values(this->nb_rows_ * this->nb_columns_, 0.0);
     
@@ -65,9 +68,10 @@ AlbeitFlatMatrix AlbeitFlatMatrix::operator+(const AlbeitFlatMatrix& m) const {
 
 AlbeitFlatMatrix AlbeitFlatMatrix::operator-(const AlbeitFlatMatrix& m) const {
 
-    if (m.nb_rows_ != this->nb_rows_ || m.nb_columns_ != this->nb_columns_) {
-        throw std::length_error("Matrix of different size are not additive");
-    }
+    ALBEIT_CHECK(
+        m.nb_rows_ == this->nb_rows_ && m.nb_columns_ == this->nb_columns_,
+        std::length_error("Matrix of different size are not additive")
+    );
 
     std::vector<double> sub_values(this->nb_rows_ * this->nb_columns_, 0.0);
     
@@ -84,9 +88,10 @@ AlbeitFlatMatrix AlbeitFlatMatrix::operator-(const AlbeitFlatMatrix& m) const {
 
 AlbeitFlatMatrix AlbeitFlatMatrix::operator*(const AlbeitFlatMatrix& m) const {
 
-    if (m.nb_rows_ != this->nb_columns_) {
-        throw std::length_error("Matrix can't be multiplied");
-    }
+    ALBEIT_CHECK(
+        m.nb_rows_ == this->nb_columns_,
+        std::length_error("Matrix can't be multiplied")
+    );
     int n = this->nb_rows_;
     int p = m.nb_columns_;
     int q = this->nb_columns_;
@@ -107,9 +112,10 @@ AlbeitFlatMatrix AlbeitFlatMatrix::operator*(const AlbeitFlatMatrix& m) const {
 //Methods
 const double& AlbeitFlatMatrix::getValue(unsigned int row, unsigned int column) const {
 
-    if (row >= this->nb_rows_ || column >= this->nb_columns_) {
-        throw std::out_of_range("Indexes out of range");
-    }
+    ALBEIT_CHECK(
+        row < this->nb_rows_ && column < this->nb_columns_,
+        std::out_of_range("Indexes out of range")
+    );
 
     return values_[row * this->nb_columns_ + column];
 }
