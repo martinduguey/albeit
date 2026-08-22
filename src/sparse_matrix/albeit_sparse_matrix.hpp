@@ -1,7 +1,7 @@
 #ifndef __ALBEIT_SPARSE_MATRIX_HPP__
 #define __ALBEIT_SPARSE_MATRIX_HPP__
 
-#include "albeit_matrix.hpp"
+#include "matrix/albeit_matrix.hpp"
 #include <vector>
 
 class AlbeitSparseMatrix : public AlbeitMatrix{

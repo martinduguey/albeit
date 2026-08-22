@@ -1,7 +1,7 @@
 #ifndef __ALBEIT_FLAT_MATRIX_HPP__
 #define __ALBEIT_FLAT_MATRIX_HPP__
 
-#include "albeit_matrix.hpp"
+#include "matrix/albeit_matrix.hpp"
 #include <vector>
 
 class AlbeitFlatMatrix : public AlbeitMatrix{

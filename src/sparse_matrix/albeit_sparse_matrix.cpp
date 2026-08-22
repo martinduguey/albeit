@@ -1,4 +1,4 @@
-#include "../../header/albeit_sparse_matrix.hpp"
+#include "albeit_sparse_matrix.hpp"
 #include <stdexcept>
 #include <cassert>
 

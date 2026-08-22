@@ -1,4 +1,4 @@
-#include "../../header/albeit_matrix.hpp"
+#include "albeit_matrix.hpp"
 
 //Builder
 AlbeitMatrix::AlbeitMatrix(unsigned int nb_rows, unsigned int nb_columns){

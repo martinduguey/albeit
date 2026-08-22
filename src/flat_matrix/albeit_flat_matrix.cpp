@@ -1,4 +1,4 @@
-#include "../../header/albeit_flat_matrix.hpp"
+#include "albeit_flat_matrix.hpp"
 #include <stdexcept>
 
 //Builder

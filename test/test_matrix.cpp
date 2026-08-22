@@ -1,7 +1,7 @@
-#include "../header/albeit_matrix.hpp"
-#include "../header/albeit_flat_matrix.hpp"
-#include "../header/albeit_sparse_matrix.hpp"
-#include "../utils/utils_comp.hpp"
+#include "matrix/albeit_matrix.hpp"
+#include "flat_matrix/albeit_flat_matrix.hpp"
+#include "sparse_matrix/albeit_sparse_matrix.hpp"
+#include "utils_comp.hpp"
 
 #include <vector>
 
